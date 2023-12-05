@@ -1,61 +1,79 @@
 #include <iostream>
 using namespace std;
 
-const int size = 50;
-int A[size];
-int top = -1;
+struct Node {
+    int data;
+    Node* prev;
+    Node* next;
+};
 
-bool isEmpty() {
-    return top == -1;
-}
+void addFront(Node** head_ref, int new_data) {
+    Node* new_node = new Node();
+    new_node->data = new_data;
+    new_node->next = (*head_ref);
+    new_node->prev = NULL;
 
-void push(int value) {
-    if (top == size - 1) {
-        cout << "Stack is full" << endl;
-    } else {
-        top++;
-        A[top] = value;
+    if ((*head_ref) != NULL) {
+        (*head_ref)->prev = new_node;
+    }
+
+    (*head_ref) = new_node;
+
+    if ((*head_ref) == NULL || (*head_ref)->next == NULL) {
+        (*head_ref) = new_node;
     }
 }
 
-void pop() {
-    if (isEmpty()) {
-        cout << "Stack is empty" << endl;
-    } else {
-        top--;
+void deleteNode(Node** head_ref, Node* del) {
+    if (*head_ref == NULL || del == NULL) {
+        return;
     }
-}
 
-void showTop() {
-    if (isEmpty()) {
-        cout << "Stack is empty" << endl;
-    } else {
-        cout << "Element at the top is: " << A[top] << endl;
+    if (*head_ref == del) {
+        *head_ref = del->next;
     }
-}
 
-void displayStack() {
-    if (isEmpty()) {
-        cout << "Stack is empty" << endl;
-    } else {
-        for (int i = 0; i <= top; i++) {
-            cout << A[i] << " ";
-        }
-        cout << endl;
+    if (del->next != NULL) {
+        del->next->prev = del->prev;
     }
+
+    if (del->prev != NULL) {
+        del->prev->next = del->next;
+    }
+
+    delete del;
 }
 
 int main() {
-    push(8);
-    push(9);
-    push(10);
+    Node* head = NULL;
 
-    displayStack();
+    addFront(&head, 3);
+    addFront(&head, 7);
+    addFront(&head, 10);
 
-    showTop();
+    Node* nodeToDelete = head->next;
+    deleteNode(&head, nodeToDelete);
 
-    pop();
-    displayStack();
 
+    Node* current = head;
+    while (current != NULL) {
+        cout << current->data << " ";
+        current = current->next;
+    }
+    current = head;
+    while (current != NULL) {
+        Node* temp = current;
+        current = current->next;
+        delete temp;
+    }
     return 0;
 }
+
+
+
+
+
+
+
+
+
