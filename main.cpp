@@ -3,77 +3,44 @@ using namespace std;
 
 struct Node {
     int data;
-    Node* prev;
-    Node* next;
+    Node* left;
+    Node* right;
+    Node(int val){
+           data=val;
+           left=NULL;
+           right=NULL;
+     }
 };
 
-void addFront(Node** head_ref, int new_data) {
-    Node* new_node = new Node();
-    new_node->data = new_data;
-    new_node->next = (*head_ref);
-    new_node->prev = NULL;
+Node* insertBST(Node*root,int val) {
+    if (root ==NULL) {
+       return new Node(val);
+      }
+       if inOrderTraversal(root->left);
 
-    if ((*head_ref) != NULL) {
-        (*head_ref)->prev = new_node;
+        std::cout << root->val << " ";
+
+        inOrderTraversal(root->right);
     }
-
-    (*head_ref) = new_node;
-
-    if ((*head_ref) == NULL || (*head_ref)->next == NULL) {
-        (*head_ref) = new_node;
-    }
-}
-
-void deleteNode(Node** head_ref, Node* del) {
-    if (*head_ref == NULL || del == NULL) {
-        return;
-    }
-
-    if (*head_ref == del) {
-        *head_ref = del->next;
-    }
-
-    if (del->next != NULL) {
-        del->next->prev = del->prev;
-    }
-
-    if (del->prev != NULL) {
-        del->prev->next = del->next;
-    }
-
-    delete del;
 }
 
 int main() {
-    Node* head = NULL;
+    // Create a sample binary tree
+    Node* root = new Node(1);
+    root->left = new Node(2);
+    root->right = new Node(3);
+    root->left->left = new Node(4);
+    root->left->right = new Node(5);
 
-    addFront(&head, 3);
-    addFront(&head, 7);
-    addFront(&head, 10);
+    // Perform in-order traversal
+    std::cout << "In-order traversal: ";
+    inOrderTraversal(root);
 
-    Node* nodeToDelete = head->next;
-    deleteNode(&head, nodeToDelete);
+    delete root->left->left;
+    delete root->left->right;
+    delete root->left;
+    delete root->right;
+    delete root;
 
-
-    Node* current = head;
-    while (current != NULL) {
-        cout << current->data << " ";
-        current = current->next;
-    }
-    current = head;
-    while (current != NULL) {
-        Node* temp = current;
-        current = current->next;
-        delete temp;
-    }
     return 0;
 }
-
-
-
-
-
-
-
-
-
